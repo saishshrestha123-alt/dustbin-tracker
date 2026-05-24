@@ -7,30 +7,16 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap');
-
     :root {
-      --bg:     #070e18;
-      --panel:  #0d1829;
-      --card:   #111f30;
-      --border: #192d44;
-      --accent: #00e5a0;
-      --warn:   #ffb300;
-      --high:   #ff7700;
-      --danger: #ff3b3b;
-      --text:   #d8eeff;
-      --muted:  #3d5c7a;
-      --radius: 12px;
+      --bg: #070e18; --panel: #0d1829; --card: #111f30; --border: #192d44;
+      --accent: #00e5a0; --warn: #ffb300; --high: #ff7700; --danger: #ff3b3b;
+      --text: #d8eeff; --muted: #3d5c7a; --radius: 12px;
     }
-
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     html, body { height: 100%; overflow: hidden; }
     body { font-family: 'Syne', sans-serif; background: var(--bg); color: var(--text); display: flex; flex-direction: column; }
 
-    header {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 11px 22px; background: var(--panel);
-      border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 200; gap: 12px;
-    }
+    header { display: flex; align-items: center; justify-content: space-between; padding: 11px 22px; background: var(--panel); border-bottom: 1px solid var(--border); flex-shrink: 0; z-index: 200; gap: 12px; }
     .logo { display: flex; align-items: center; gap: 11px; min-width: 0; }
     .logo-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 9px; display: flex; align-items: center; justify-content: center; font-size: 19px; flex-shrink: 0; }
     .logo-text h1 { font-size: 1rem; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
@@ -42,12 +28,12 @@
     #status-pill.live  #status-dot { background: var(--accent); animation: dotPulse 1.8s ease-in-out infinite; }
     #status-pill.error { border-color: rgba(255,59,59,0.3); }
     #status-pill.error #status-dot { background: var(--danger); }
-    @keyframes dotPulse { 0%,100% { box-shadow: 0 0 0 0 rgba(0,229,160,0.5); } 50% { box-shadow: 0 0 0 5px rgba(0,229,160,0); } }
+    @keyframes dotPulse { 0%,100%{box-shadow:0 0 0 0 rgba(0,229,160,0.5);}50%{box-shadow:0 0 0 5px rgba(0,229,160,0);} }
 
     #alert-banner { display: none; text-align: center; padding: 9px 20px; background: linear-gradient(90deg,#7f0000,var(--danger),#7f0000); background-size: 200% 100%; animation: alertSlide 0.4s ease, alertShimmer 2s linear infinite; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; font-weight: 600; letter-spacing: 0.04em; flex-shrink: 0; z-index: 190; }
     #alert-banner.visible { display: block; }
-    @keyframes alertSlide   { from { opacity:0; transform:translateY(-100%); } to { opacity:1; transform:none; } }
-    @keyframes alertShimmer { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+    @keyframes alertSlide   { from{opacity:0;transform:translateY(-100%);}to{opacity:1;transform:none;} }
+    @keyframes alertShimmer { 0%{background-position:200% 0;}100%{background-position:-200% 0;} }
 
     .main    { display: flex; flex: 1; overflow: hidden; min-height: 0; }
     .sidebar { width: 295px; background: var(--panel); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow-y: auto; flex-shrink: 0; scrollbar-width: thin; scrollbar-color: var(--border) transparent; }
@@ -77,7 +63,7 @@
     .coord-card:last-child { margin-bottom: 0; }
     .coord-card::after { content:''; position:absolute; inset:0; background:rgba(0,229,160,0.08); opacity:0; pointer-events:none; }
     .coord-card.flash::after { animation: coordFlash 0.7s ease forwards; }
-    @keyframes coordFlash { 0% { opacity:1; } 100% { opacity:0; } }
+    @keyframes coordFlash { 0%{opacity:1;}100%{opacity:0;} }
     .coord-label { font-size: 0.6rem; font-family: 'JetBrains Mono', monospace; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
     .coord-value { font-size: 1.05rem; font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--accent); }
 
@@ -97,7 +83,7 @@
     .leaflet-tile-pane { filter: brightness(0.82) saturate(0.88); }
 
     .bin-marker { width: 44px; height: 44px; border-radius: 50% 50% 50% 6px; border: 3px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 20px; cursor: pointer; transition: background 0.5s, box-shadow 0.5s; animation: markerBounce 0.5s cubic-bezier(0.175,0.885,0.32,1.275); }
-    @keyframes markerBounce { 0% { transform:scale(0) translateY(12px); opacity:0; } 100% { transform:scale(1) translateY(0); opacity:1; } }
+    @keyframes markerBounce { 0%{transform:scale(0) translateY(12px);opacity:0;}100%{transform:scale(1) translateY(0);opacity:1;} }
 
     .leaflet-popup-content-wrapper { background: var(--card) !important; border: 1px solid var(--border) !important; border-radius: var(--radius) !important; box-shadow: 0 8px 32px rgba(0,0,0,0.6) !important; color: var(--text) !important; }
     .leaflet-popup-tip { background: var(--card) !important; }
@@ -108,7 +94,7 @@
     #waiting-overlay { position: absolute; inset: 0; background: rgba(7,14,24,0.88); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; z-index: 300; backdrop-filter: blur(2px); }
     #waiting-overlay.hidden { display: none; }
     .spinner { width: 42px; height: 42px; border: 3px solid var(--border); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; }
-    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes spin { to{transform:rotate(360deg);} }
     #waiting-overlay p { color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; }
 
     #toast { position: fixed; bottom: 22px; right: 22px; background: var(--panel); border: 1px solid var(--border); color: var(--text); font-family: 'JetBrains Mono', monospace; font-size: 0.74rem; padding: 9px 16px; border-radius: 9px; box-shadow: 0 8px 32px rgba(0,0,0,0.5); z-index: 9999; pointer-events: none; transform: translateY(70px); opacity: 0; transition: transform 0.35s cubic-bezier(0.175,0.885,0.32,1.275), opacity 0.35s ease; }
@@ -148,8 +134,8 @@
       <div class="fill-section">
         <div class="gauge-wrap">
           <svg viewBox="0 0 160 160">
-            <circle class="gauge-track" cx="80" cy="80" r="64" />
-            <circle class="gauge-arc" id="gauge-arc" cx="80" cy="80" r="64" stroke="var(--accent)" />
+            <circle class="gauge-track" cx="80" cy="80" r="64"/>
+            <circle class="gauge-arc" id="gauge-arc" cx="80" cy="80" r="64" stroke="var(--accent)"/>
           </svg>
           <div class="gauge-center">
             <div class="gauge-pct" id="gauge-pct" style="color:var(--accent)">—</div>
@@ -162,9 +148,7 @@
             <span>CAPACITY BAR</span>
             <span class="bin-bar-val" id="bar-label">—</span>
           </div>
-          <div class="bin-bar-track">
-            <div class="bin-bar-fill" id="bar-fill"></div>
-          </div>
+          <div class="bin-bar-track"><div class="bin-bar-fill" id="bar-fill"></div></div>
           <div class="bin-bar-ticks">
             <span>0%</span><span>25%</span><span>50%</span><span>75%</span><span>100%</span>
           </div>
@@ -199,9 +183,7 @@
         <span>NEXT REFRESH</span>
         <span id="countdown">5s</span>
       </div>
-      <div class="refresh-track">
-        <div class="refresh-fill" id="refresh-fill"></div>
-      </div>
+      <div class="refresh-track"><div class="refresh-fill" id="refresh-fill"></div></div>
     </div>
 
   </aside>
@@ -216,113 +198,107 @@
 </div>
 
 <div id="toast"></div>
-
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script>
 
-// ── Map Setup ─────────────────────────────────────────────────
-const map = L.map('map', { center: [27.7172, 85.3240], zoom: 15, zoomControl: true });
+const map = L.map('map', { center:[27.7172,85.3240], zoom:15, zoomControl:true });
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   attribution: '© <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   maxZoom: 19,
 }).addTo(map);
 
-const GAUGE_CIRC = 2 * Math.PI * 64;
+const GAUGE_CIRC      = 2 * Math.PI * 64;
 const POLL_INTERVAL_MS = 5000;
+
+// ── Fetch URL: uses https:// — browsers require https for Railway ──
+const API_URL = 'https://dustbin-tracker-production.up.railway.app/api/get-location';
+
 let cycleStart = Date.now();
-let leafletMarker = null;
-let hasReceivedFirstFix = false;
+let leafletMarker = null, hasFirstFix = false;
 let prevLat = null, prevLon = null, prevFill = null;
 let toastTimer = null;
 
 function getFillStyle(pct) {
-  if (pct === null || pct === undefined) return { color: '#3d5c7a', glow: 'none', badgeText: 'AWAITING DATA' };
-  if (pct >= 90) return { color: '#ff3b3b', glow: 'rgba(255,59,59,0.45)',  badgeText: '🔴 CRITICAL — FULL' };
-  if (pct >= 70) return { color: '#ff7700', glow: 'rgba(255,119,0,0.40)',  badgeText: '🟠 HIGH'            };
-  if (pct >= 40) return { color: '#ffb300', glow: 'rgba(255,179,0,0.35)',  badgeText: '🟡 MEDIUM'          };
-  if (pct >=  1) return { color: '#00e5a0', glow: 'rgba(0,229,160,0.30)',  badgeText: '🟢 LOW'             };
-  return               { color: '#00e5a0', glow: 'none',                  badgeText: '✅ EMPTY'            };
+  if (pct === null || pct === undefined) return { color:'#3d5c7a', glow:'none', badge:'AWAITING DATA' };
+  if (pct >= 90) return { color:'#ff3b3b', glow:'rgba(255,59,59,0.45)',  badge:'🔴 CRITICAL — FULL' };
+  if (pct >= 70) return { color:'#ff7700', glow:'rgba(255,119,0,0.40)',  badge:'🟠 HIGH'            };
+  if (pct >= 40) return { color:'#ffb300', glow:'rgba(255,179,0,0.35)',  badge:'🟡 MEDIUM'          };
+  if (pct >=  1) return { color:'#00e5a0', glow:'rgba(0,229,160,0.30)',  badge:'🟢 LOW'             };
+  return               { color:'#00e5a0', glow:'none',                  badge:'✅ EMPTY'            };
 }
 
 function updateFillUI(pct) {
   const s = getFillStyle(pct);
+
   const arc = document.getElementById('gauge-arc');
   arc.style.stroke = s.color;
-  arc.style.strokeDashoffset = (pct === null) ? GAUGE_CIRC : GAUGE_CIRC * (1 - pct / 100);
+  arc.style.strokeDashoffset = pct === null ? GAUGE_CIRC : GAUGE_CIRC * (1 - pct/100);
 
   const pctEl = document.getElementById('gauge-pct');
-  pctEl.textContent = (pct !== null) ? pct + '%' : '—';
+  pctEl.textContent = pct !== null ? pct+'%' : '—';
   pctEl.style.color = s.color;
 
   const badge = document.getElementById('fill-badge');
-  badge.textContent       = s.badgeText;
-  badge.style.color       = s.color;
-  badge.style.borderColor = s.color;
-  badge.style.boxShadow   = (s.glow !== 'none') ? `0 0 14px ${s.glow}` : 'none';
+  badge.textContent = s.badge;
+  badge.style.color = badge.style.borderColor = s.color;
+  badge.style.boxShadow = s.glow !== 'none' ? `0 0 14px ${s.glow}` : 'none';
 
-  const barFill = document.getElementById('bar-fill');
-  barFill.style.width      = (pct !== null ? pct : 0) + '%';
-  barFill.style.background = (pct !== null) ? `linear-gradient(90deg, ${s.color}88, ${s.color})` : 'var(--border)';
-  document.getElementById('bar-label').textContent = (pct !== null) ? pct + '%' : '—';
+  const bar = document.getElementById('bar-fill');
+  bar.style.width      = (pct !== null ? pct : 0) + '%';
+  bar.style.background = pct !== null ? `linear-gradient(90deg,${s.color}88,${s.color})` : 'var(--border)';
+  document.getElementById('bar-label').textContent = pct !== null ? pct+'%' : '—';
 
   const banner = document.getElementById('alert-banner');
-  if (pct !== null && pct >= 90) { banner.classList.add('visible'); }
-  else { banner.classList.remove('visible'); }
+  pct !== null && pct >= 90 ? banner.classList.add('visible') : banner.classList.remove('visible');
 }
 
-function buildMarkerIcon(pct) {
+function buildIcon(pct) {
   const s = getFillStyle(pct);
   return L.divIcon({
     className: '',
-    html: `<div class="bin-marker" style="background:${s.color};box-shadow:0 5px 20px ${s.glow !== 'none' ? s.glow : 'rgba(0,0,0,0.4)'};">🗑️</div>`,
-    iconSize: [44,44], iconAnchor: [22,44], popupAnchor: [0,-50],
+    html: `<div class="bin-marker" style="background:${s.color};box-shadow:0 5px 20px ${s.glow!=='none'?s.glow:'rgba(0,0,0,0.4)'};">🗑️</div>`,
+    iconSize:[44,44], iconAnchor:[22,44], popupAnchor:[0,-50],
   });
 }
 
-function buildPopupHtml(lat, lon, pct, timestamp) {
+function buildPopup(lat, lon, pct, ts) {
   const s = getFillStyle(pct);
-  const t = timestamp ? new Date(timestamp).toLocaleTimeString() : '—';
-  const pctLabel = (pct !== null) ? `${pct}% — ${s.badgeText}` : '—';
+  const t = ts ? new Date(ts).toLocaleTimeString() : '—';
   return `<div class="popup-inner">
     <div class="popup-title">🗑️ Dustbin</div>
     <div><span class="popup-key">Lat: </span>${lat.toFixed(6)}</div>
     <div><span class="popup-key">Lon: </span>${lon.toFixed(6)}</div>
-    <div><span class="popup-key">Fill: </span><span style="color:${s.color};font-weight:600">${pctLabel}</span></div>
+    <div><span class="popup-key">Fill: </span><span style="color:${s.color};font-weight:600">${pct!==null?pct+'% — '+s.badge:'—'}</span></div>
     <div><span class="popup-key">Time: </span>${t}</div>
   </div>`;
 }
 
 function updateMarker(lat, lon, fill) {
-  const icon = buildMarkerIcon(fill);
+  const icon = buildIcon(fill);
   if (!leafletMarker) {
-    leafletMarker = L.marker([lat, lon], { icon }).addTo(map).bindPopup(buildPopupHtml(lat, lon, fill, new Date().toISOString()));
+    leafletMarker = L.marker([lat,lon],{icon}).addTo(map).bindPopup(buildPopup(lat,lon,fill,new Date().toISOString()));
   } else {
-    const fromLat = leafletMarker.getLatLng().lat;
-    const fromLon = leafletMarker.getLatLng().lng;
-    const STEPS = 30; let step = 0;
-    function animateStep() {
+    const fLat = leafletMarker.getLatLng().lat, fLon = leafletMarker.getLatLng().lng;
+    let step = 0;
+    (function animate() {
       step++;
-      const t = step / STEPS;
-      const ease = t * t * (3 - 2 * t);
-      leafletMarker.setLatLng([fromLat + (lat - fromLat) * ease, fromLon + (lon - fromLon) * ease]);
-      if (step < STEPS) requestAnimationFrame(animateStep);
-    }
-    requestAnimationFrame(animateStep);
+      const e = (step/30)**2 * (3 - 2*(step/30));
+      leafletMarker.setLatLng([fLat+(lat-fLat)*e, fLon+(lon-fLon)*e]);
+      if (step < 30) requestAnimationFrame(animate);
+    })();
     leafletMarker.setIcon(icon);
-    leafletMarker.setPopupContent(buildPopupHtml(lat, lon, fill, new Date().toISOString()));
+    leafletMarker.setPopupContent(buildPopup(lat,lon,fill,new Date().toISOString()));
   }
-  if (!hasReceivedFirstFix) {
-    map.setView([lat, lon], 17, { animate: true, duration: 1.2 });
-    hasReceivedFirstFix = true;
+  if (!hasFirstFix) {
+    map.setView([lat,lon],17,{animate:true,duration:1.2});
+    hasFirstFix = true;
     document.getElementById('waiting-overlay').classList.add('hidden');
   }
 }
 
 function flashCard(id) {
   const el = document.getElementById(id);
-  el.classList.remove('flash');
-  void el.offsetWidth;
-  el.classList.add('flash');
+  el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash');
 }
 
 function setStatus(state, text) {
@@ -332,55 +308,41 @@ function setStatus(state, text) {
 
 function showToast(msg) {
   const el = document.getElementById('toast');
-  el.textContent = msg;
-  el.classList.add('visible');
+  el.textContent = msg; el.classList.add('visible');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.remove('visible'), 2800);
 }
 
-function animateCountdown() {
-  const elapsed  = Date.now() - cycleStart;
-  const progress = Math.min(elapsed / POLL_INTERVAL_MS, 1) * 100;
-  const remaining = Math.max(0, Math.ceil((POLL_INTERVAL_MS - elapsed) / 1000));
-  document.getElementById('refresh-fill').style.width = progress + '%';
-  document.getElementById('countdown').textContent = remaining + 's';
-  requestAnimationFrame(animateCountdown);
-}
-animateCountdown();
+(function countdown() {
+  const elapsed = Date.now() - cycleStart;
+  document.getElementById('refresh-fill').style.width = Math.min(elapsed/POLL_INTERVAL_MS,1)*100 + '%';
+  document.getElementById('countdown').textContent = Math.max(0,Math.ceil((POLL_INTERVAL_MS-elapsed)/1000)) + 's';
+  requestAnimationFrame(countdown);
+})();
 
 async function fetchAndUpdate() {
   try {
-    // Uses https:// for browser fetch (Railway supports https)
-    const response = await fetch('https://dustbin-tracker-production.up.railway.app/api/get-location');
-    if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
-    const data = await response.json();
+    const res  = await fetch(API_URL);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
 
     if (data.status === 'ok' && data.lat !== null) {
       const lat  = parseFloat(data.lat);
       const lon  = parseFloat(data.lon);
-      const fill = (data.fill !== null && data.fill !== undefined) ? parseInt(data.fill, 10) : null;
+      const fill = data.fill !== null ? parseInt(data.fill, 10) : null;
 
-      const posChanged  = (lat !== prevLat || lon !== prevLon);
-      const fillChanged = (fill !== prevFill);
-
-      if (posChanged || fillChanged) {
+      if (lat !== prevLat || lon !== prevLon || fill !== prevFill) {
         updateFillUI(fill);
         updateMarker(lat, lon, fill);
-
-        if (posChanged) {
-          flashCard('card-lat');
-          flashCard('card-lon');
+        if (lat !== prevLat || lon !== prevLon) {
+          flashCard('card-lat'); flashCard('card-lon');
           document.getElementById('val-lat').textContent = lat.toFixed(6);
           document.getElementById('val-lon').textContent = lon.toFixed(6);
         }
-
         document.getElementById('stat-time').textContent    = new Date(data.timestamp).toLocaleTimeString();
         document.getElementById('stat-updates').textContent = data.updates;
-
         const s = getFillStyle(fill);
-        showToast(fill !== null ? `📍 Updated · Fill: ${fill}% · ${s.badgeText}` : '📍 Location updated');
-
+        showToast(fill !== null ? `📍 Updated · Fill: ${fill}% · ${s.badge}` : '📍 Location updated');
         prevLat = lat; prevLon = lon; prevFill = fill;
       }
       setStatus('live', 'Live · GPS + Sensor Active');
@@ -388,9 +350,8 @@ async function fetchAndUpdate() {
     } else if (data.status === 'waiting') {
       setStatus('', 'Waiting for ESP32...');
     }
-
-  } catch (err) {
-    console.error('[Fetch Error]', err.message);
+  } catch(err) {
+    console.error(err);
     setStatus('error', 'Cannot reach server');
   }
   cycleStart = Date.now();
